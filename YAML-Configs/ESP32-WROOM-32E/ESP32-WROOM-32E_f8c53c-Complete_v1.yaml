@@ -1,7 +1,7 @@
 # [ ==== ESP Home Info ==== ] #
 esphome:
   name: esphome-web-f8c53c
-  friendly_name: ESPHome MacroPad 32S
+  friendly_name: ESPHome MacroPad 32E
   min_version: 2025.9.0
   name_add_mac_suffix: false
 
@@ -39,60 +39,60 @@ time:
         hours: 0
         then:
           - lambda: |-
-              id(macropad_32s_key_1_count) = 0;
-              id(macropad_32s_key_2_count) = 0;
-              id(macropad_32s_key_3_count) = 0;
-              id(macropad_32s_key_4_count) = 0;
-              id(macropad_32s_key_5_count) = 0;
-              id(macropad_32s_key_6_count) = 0;
-              id(macropad_32s_key_7_count) = 0;
-              id(macropad_32s_key_8_count) = 0;
-              id(macropad_32s_key_9_count) = 0;
-              id(macropad_32s_key_1_presses_today).publish_state(0);
-              id(macropad_32s_key_2_presses_today).publish_state(0);
-              id(macropad_32s_key_3_presses_today).publish_state(0);
-              id(macropad_32s_key_4_presses_today).publish_state(0);
-              id(macropad_32s_key_5_presses_today).publish_state(0);
-              id(macropad_32s_key_6_presses_today).publish_state(0);
-              id(macropad_32s_key_7_presses_today).publish_state(0);
-              id(macropad_32s_key_8_presses_today).publish_state(0);
-              id(macropad_32s_key_9_presses_today).publish_state(0);
+              id(macropad_32e_key_1_count) = 0;
+              id(macropad_32e_key_2_count) = 0;
+              id(macropad_32e_key_3_count) = 0;
+              id(macropad_32e_key_4_count) = 0;
+              id(macropad_32e_key_5_count) = 0;
+              id(macropad_32e_key_6_count) = 0;
+              id(macropad_32e_key_7_count) = 0;
+              id(macropad_32e_key_8_count) = 0;
+              id(macropad_32e_key_9_count) = 0;
+              id(macropad_32e_key_1_presses_today).publish_state(0);
+              id(macropad_32e_key_2_presses_today).publish_state(0);
+              id(macropad_32e_key_3_presses_today).publish_state(0);
+              id(macropad_32e_key_4_presses_today).publish_state(0);
+              id(macropad_32e_key_5_presses_today).publish_state(0);
+              id(macropad_32e_key_6_presses_today).publish_state(0);
+              id(macropad_32e_key_7_presses_today).publish_state(0);
+              id(macropad_32e_key_8_presses_today).publish_state(0);
+              id(macropad_32e_key_9_presses_today).publish_state(0);
 
 # [ ==== Button Press Tracking ==== ] #
 globals:
-  - id: macropad_32s_key_1_count
+  - id: macropad_32e_key_1_count
     type: int
     restore_value: no
     initial_value: '0'
-  - id: macropad_32s_key_2_count
+  - id: macropad_32e_key_2_count
     type: int
     restore_value: no
     initial_value: '0'
-  - id: macropad_32s_key_3_count
+  - id: macropad_32e_key_3_count
     type: int
     restore_value: no
     initial_value: '0'
-  - id: macropad_32s_key_4_count
+  - id: macropad_32e_key_4_count
     type: int
     restore_value: no
     initial_value: '0'
-  - id: macropad_32s_key_5_count
+  - id: macropad_32e_key_5_count
     type: int
     restore_value: no
     initial_value: '0'
-  - id: macropad_32s_key_6_count
+  - id: macropad_32e_key_6_count
     type: int
     restore_value: no
     initial_value: '0'
-  - id: macropad_32s_key_7_count
+  - id: macropad_32e_key_7_count
     type: int
     restore_value: no
     initial_value: '0'
-  - id: macropad_32s_key_8_count
+  - id: macropad_32e_key_8_count
     type: int
     restore_value: no
     initial_value: '0'
-  - id: macropad_32s_key_9_count
+  - id: macropad_32e_key_9_count
     type: int
     restore_value: no
     initial_value: '0'
@@ -100,12 +100,12 @@ globals:
 # [ ==== Buttons ==== ] #
 button:
   - platform: factory_reset
-    name: "MacroPad 32S Factory Reset"
+    name: "MacroPad 32E Factory Reset"
 
 # [ ==== Lights ==== ] #
 light:
   - platform: status_led
-    name: "MacroPad 32S Status LED"
+    name: "MacroPad 32E Status LED"
     pin: 
       number: GPIO2
       ignore_strapping_warning: true
@@ -113,125 +113,125 @@ light:
 # [ ==== Sensors ==== ] #
 sensor:
   - platform: template
-    name: "MacroPad 32S Key 1 Presses Today"
-    id: macropad_32s_key_1_presses_today
+    name: "MacroPad 32E Key 1 Presses Today"
+    id: macropad_32e_key_1_presses_today
     icon: mdi:counter
     accuracy_decimals: 0
     update_interval: never
-    lambda: 'return id(macropad_32s_key_1_count);'
+    lambda: 'return id(macropad_32e_key_1_count);'
   - platform: template
-    name: "MacroPad 32S Key 2 Presses Today"
-    id: macropad_32s_key_2_presses_today
+    name: "MacroPad 32E Key 2 Presses Today"
+    id: macropad_32e_key_2_presses_today
     icon: mdi:counter
     accuracy_decimals: 0
     update_interval: never
-    lambda: 'return id(macropad_32s_key_2_count);'
+    lambda: 'return id(macropad_32e_key_2_count);'
   - platform: template
-    name: "MacroPad 32S Key 3 Presses Today"
-    id: macropad_32s_key_3_presses_today
+    name: "MacroPad 32E Key 3 Presses Today"
+    id: macropad_32e_key_3_presses_today
     icon: mdi:counter
     accuracy_decimals: 0
     update_interval: never
-    lambda: 'return id(macropad_32s_key_3_count);'
+    lambda: 'return id(macropad_32e_key_3_count);'
   - platform: template
-    name: "MacroPad 32S Key 4 Presses Today"
-    id: macropad_32s_key_4_presses_today
+    name: "MacroPad 32E Key 4 Presses Today"
+    id: macropad_32e_key_4_presses_today
     icon: mdi:counter
     accuracy_decimals: 0
     update_interval: never
-    lambda: 'return id(macropad_32s_key_4_count);'
+    lambda: 'return id(macropad_32e_key_4_count);'
   - platform: template
-    name: "MacroPad 32S Key 5 Presses Today"
-    id: macropad_32s_key_5_presses_today
+    name: "MacroPad 32E Key 5 Presses Today"
+    id: macropad_32e_key_5_presses_today
     icon: mdi:counter
     accuracy_decimals: 0
     update_interval: never
-    lambda: 'return id(macropad_32s_key_5_count);'
+    lambda: 'return id(macropad_32e_key_5_count);'
   - platform: template
-    name: "MacroPad 32S Key 6 Presses Today"
-    id: macropad_32s_key_6_presses_today
+    name: "MacroPad 32E Key 6 Presses Today"
+    id: macropad_32e_key_6_presses_today
     icon: mdi:counter
     accuracy_decimals: 0
     update_interval: never
-    lambda: 'return id(macropad_32s_key_6_count);'
+    lambda: 'return id(macropad_32e_key_6_count);'
   - platform: template
-    name: "MacroPad 32S Key 7 Presses Today"
-    id: macropad_32s_key_7_presses_today
+    name: "MacroPad 32E Key 7 Presses Today"
+    id: macropad_32e_key_7_presses_today
     icon: mdi:counter
     accuracy_decimals: 0
     update_interval: never
-    lambda: 'return id(macropad_32s_key_7_count);'
+    lambda: 'return id(macropad_32e_key_7_count);'
   - platform: template
-    name: "MacroPad 32S Key 8 Presses Today"
-    id: macropad_32s_key_8_presses_today
+    name: "MacroPad 32E Key 8 Presses Today"
+    id: macropad_32e_key_8_presses_today
     icon: mdi:counter
     accuracy_decimals: 0
     update_interval: never
-    lambda: 'return id(macropad_32s_key_8_count);'
+    lambda: 'return id(macropad_32e_key_8_count);'
   - platform: template
-    name: "MacroPad 32S Key 9 Presses Today"
-    id: macropad_32s_key_9_presses_today
+    name: "MacroPad 32E Key 9 Presses Today"
+    id: macropad_32e_key_9_presses_today
     icon: mdi:counter
     accuracy_decimals: 0
     update_interval: never
-    lambda: 'return id(macropad_32s_key_9_count);'
+    lambda: 'return id(macropad_32e_key_9_count);'
 
 # [ ==== Text Sensors ==== ] #
 text_sensor:
   - platform: wifi_info
     ip_address:
-      name: "MacroPad 32S IP Address"
+      name: "MacroPad 32E IP Address"
   - platform: version
     name: "ESPHome Version"
   - platform: template
-    name: "MacroPad 32S Key 1 Last Pressed"
-    id: macropad_32s_key_1_last_pressed
+    name: "MacroPad 32E Key 1 Last Pressed"
+    id: macropad_32e_key_1_last_pressed
     icon: mdi:clock-outline
     update_interval: never
   - platform: template
-    name: "MacroPad 32S Key 2 Last Pressed"
-    id: macropad_32s_key_2_last_pressed
+    name: "MacroPad 32E Key 2 Last Pressed"
+    id: macropad_32e_key_2_last_pressed
     icon: mdi:clock-outline
     update_interval: never
   - platform: template
-    name: "MacroPad 32S Key 3 Last Pressed"
-    id: macropad_32s_key_3_last_pressed
+    name: "MacroPad 32E Key 3 Last Pressed"
+    id: macropad_32e_key_3_last_pressed
     icon: mdi:clock-outline
     update_interval: never
   - platform: template
-    name: "MacroPad 32S Key 4 Last Pressed"
-    id: macropad_32s_key_4_last_pressed
+    name: "MacroPad 32E Key 4 Last Pressed"
+    id: macropad_32e_key_4_last_pressed
     icon: mdi:clock-outline
     update_interval: never
   - platform: template
-    name: "MacroPad 32S Key 5 Last Pressed"
-    id: macropad_32s_key_5_last_pressed
+    name: "MacroPad 32E Key 5 Last Pressed"
+    id: macropad_32e_key_5_last_pressed
     icon: mdi:clock-outline
     update_interval: never
   - platform: template
-    name: "MacroPad 32S Key 6 Last Pressed"
-    id: macropad_32s_key_6_last_pressed
+    name: "MacroPad 32E Key 6 Last Pressed"
+    id: macropad_32e_key_6_last_pressed
     icon: mdi:clock-outline
     update_interval: never
   - platform: template
-    name: "MacroPad 32S Key 7 Last Pressed"
-    id: macropad_32s_key_7_last_pressed
+    name: "MacroPad 32E Key 7 Last Pressed"
+    id: macropad_32e_key_7_last_pressed
     icon: mdi:clock-outline
     update_interval: never
   - platform: template
-    name: "MacroPad 32S Key 8 Last Pressed"
-    id: macropad_32s_key_8_last_pressed
+    name: "MacroPad 32E Key 8 Last Pressed"
+    id: macropad_32e_key_8_last_pressed
     icon: mdi:clock-outline
     update_interval: never
   - platform: template
-    name: "MacroPad 32S Key 9 Last Pressed"
-    id: macropad_32s_key_9_last_pressed
+    name: "MacroPad 32E Key 9 Last Pressed"
+    id: macropad_32e_key_9_last_pressed
     icon: mdi:clock-outline
     update_interval: never
 
 # [ ==== Matrix Keypad Configuration ==== ] #
 matrix_keypad:
-  id: macropad_32s_keypad
+  id: macropad_32e_keypad
   rows:
     - pin: 
         number: GPIO14    # Row 1
@@ -274,156 +274,156 @@ binary_sensor:
       mode:
         input: true
         pullup: true
-    name: "MacroPad 32S Boot Button"
+    name: "MacroPad 32E Boot Button"
   - platform: matrix_keypad
-    keypad_id: macropad_32s_keypad
-    id: macropad_32s_key_1
+    keypad_id: macropad_32e_keypad
+    id: macropad_32e_key_1
     key: "1"
-    name: "MacroPad 32S Key 1"
+    name: "MacroPad 32E Key 1"
     on_press:
       - lambda: |-
-          id(macropad_32s_key_1_count) += 1;
-          id(macropad_32s_key_1_presses_today).publish_state(id(macropad_32s_key_1_count));
+          id(macropad_32e_key_1_count) += 1;
+          id(macropad_32e_key_1_presses_today).publish_state(id(macropad_32e_key_1_count));
           
           auto time = id(ha_time).now();
           char timestamp[64];
           snprintf(timestamp, sizeof(timestamp), "%02d/%02d/%04d %02d:%02d:%02d", 
                     time.month, time.day_of_month, time.year,
                     time.hour, time.minute, time.second);
-          id(macropad_32s_key_1_last_pressed).publish_state(timestamp);
+          id(macropad_32e_key_1_last_pressed).publish_state(timestamp);
 
   - platform: matrix_keypad
-    keypad_id: macropad_32s_keypad
-    id: macropad_32s_key_2
+    keypad_id: macropad_32e_keypad
+    id: macropad_32e_key_2
     key: "2"
-    name: "MacroPad 32S Key 2"
+    name: "MacroPad 32E Key 2"
     on_press:
       - lambda: |-
-          id(macropad_32s_key_2_count) += 1;
-          id(macropad_32s_key_2_presses_today).publish_state(id(macropad_32s_key_2_count));
+          id(macropad_32e_key_2_count) += 1;
+          id(macropad_32e_key_2_presses_today).publish_state(id(macropad_32e_key_2_count));
           
           auto time = id(ha_time).now();
           char timestamp[64];
           snprintf(timestamp, sizeof(timestamp), "%02d/%02d/%04d %02d:%02d:%02d", 
                     time.month, time.day_of_month, time.year,
                     time.hour, time.minute, time.second);
-          id(macropad_32s_key_2_last_pressed).publish_state(timestamp);
+          id(macropad_32e_key_2_last_pressed).publish_state(timestamp);
 
   - platform: matrix_keypad
-    keypad_id: macropad_32s_keypad
-    id: macropad_32s_key_3
+    keypad_id: macropad_32e_keypad
+    id: macropad_32e_key_3
     key: "3"
-    name: "MacroPad 32S Key 3"
+    name: "MacroPad 32E Key 3"
     on_press:
       - lambda: |-
-          id(macropad_32s_key_3_count) += 1;
-          id(macropad_32s_key_3_presses_today).publish_state(id(macropad_32s_key_3_count));
+          id(macropad_32e_key_3_count) += 1;
+          id(macropad_32e_key_3_presses_today).publish_state(id(macropad_32e_key_3_count));
           
           auto time = id(ha_time).now();
           char timestamp[64];
           snprintf(timestamp, sizeof(timestamp), "%02d/%02d/%04d %02d:%02d:%02d", 
                     time.month, time.day_of_month, time.year,
                     time.hour, time.minute, time.second);
-          id(macropad_32s_key_3_last_pressed).publish_state(timestamp);
+          id(macropad_32e_key_3_last_pressed).publish_state(timestamp);
 
   - platform: matrix_keypad
-    keypad_id: macropad_32s_keypad
-    id: macropad_32s_key_4
+    keypad_id: macropad_32e_keypad
+    id: macropad_32e_key_4
     key: "4"
-    name: "MacroPad 32S Key 4"
+    name: "MacroPad 32E Key 4"
     on_press:
       - lambda: |-
-          id(macropad_32s_key_4_count) += 1;
-          id(macropad_32s_key_4_presses_today).publish_state(id(macropad_32s_key_4_count));
+          id(macropad_32e_key_4_count) += 1;
+          id(macropad_32e_key_4_presses_today).publish_state(id(macropad_32e_key_4_count));
           
           auto time = id(ha_time).now();
           char timestamp[64];
           snprintf(timestamp, sizeof(timestamp), "%02d/%02d/%04d %02d:%02d:%02d", 
                     time.month, time.day_of_month, time.year,
                     time.hour, time.minute, time.second);
-          id(macropad_32s_key_4_last_pressed).publish_state(timestamp);
+          id(macropad_32e_key_4_last_pressed).publish_state(timestamp);
 
   - platform: matrix_keypad
-    keypad_id: macropad_32s_keypad
-    id: macropad_32s_key_5
+    keypad_id: macropad_32e_keypad
+    id: macropad_32e_key_5
     key: "5"
-    name: "MacroPad 32S Key 5"
+    name: "MacroPad 32E Key 5"
     on_press:
       - lambda: |-
-          id(macropad_32s_key_5_count) += 1;
-          id(macropad_32s_key_5_presses_today).publish_state(id(macropad_32s_key_5_count));
+          id(macropad_32e_key_5_count) += 1;
+          id(macropad_32e_key_5_presses_today).publish_state(id(macropad_32e_key_5_count));
           
           auto time = id(ha_time).now();
           char timestamp[64];
           snprintf(timestamp, sizeof(timestamp), "%02d/%02d/%04d %02d:%02d:%02d", 
                     time.month, time.day_of_month, time.year,
                     time.hour, time.minute, time.second);
-          id(macropad_32s_key_5_last_pressed).publish_state(timestamp);
+          id(macropad_32e_key_5_last_pressed).publish_state(timestamp);
 
   - platform: matrix_keypad
-    keypad_id: macropad_32s_keypad
-    id: macropad_32s_key_6
+    keypad_id: macropad_32e_keypad
+    id: macropad_32e_key_6
     key: "6"
-    name: "MacroPad 32S Key 6"
+    name: "MacroPad 32E Key 6"
     on_press:
       - lambda: |-
-          id(macropad_32s_key_6_count) += 1;
-          id(macropad_32s_key_6_presses_today).publish_state(id(macropad_32s_key_6_count));
+          id(macropad_32e_key_6_count) += 1;
+          id(macropad_32e_key_6_presses_today).publish_state(id(macropad_32e_key_6_count));
           
           auto time = id(ha_time).now();
           char timestamp[64];
           snprintf(timestamp, sizeof(timestamp), "%02d/%02d/%04d %02d:%02d:%02d", 
                     time.month, time.day_of_month, time.year,
                     time.hour, time.minute, time.second);
-          id(macropad_32s_key_6_last_pressed).publish_state(timestamp);
+          id(macropad_32e_key_6_last_pressed).publish_state(timestamp);
 
   - platform: matrix_keypad
-    keypad_id: macropad_32s_keypad
-    id: macropad_32s_key_7
+    keypad_id: macropad_32e_keypad
+    id: macropad_32e_key_7
     key: "7"
-    name: "MacroPad 32S Key 7"
+    name: "MacroPad 32E Key 7"
     on_press:
       - lambda: |-
-          id(macropad_32s_key_7_count) += 1;
-          id(macropad_32s_key_7_presses_today).publish_state(id(macropad_32s_key_7_count));
+          id(macropad_32e_key_7_count) += 1;
+          id(macropad_32e_key_7_presses_today).publish_state(id(macropad_32e_key_7_count));
           
           auto time = id(ha_time).now();
           char timestamp[64];
           snprintf(timestamp, sizeof(timestamp), "%02d/%02d/%04d %02d:%02d:%02d", 
                     time.month, time.day_of_month, time.year,
                     time.hour, time.minute, time.second);
-          id(macropad_32s_key_7_last_pressed).publish_state(timestamp);
+          id(macropad_32e_key_7_last_pressed).publish_state(timestamp);
 
   - platform: matrix_keypad
-    keypad_id: macropad_32s_keypad
-    id: macropad_32s_key_8
+    keypad_id: macropad_32e_keypad
+    id: macropad_32e_key_8
     key: "8"
-    name: "MacroPad 32S Key 8"
+    name: "MacroPad 32E Key 8"
     on_press:
       - lambda: |-
-          id(macropad_32s_key_8_count) += 1;
-          id(macropad_32s_key_8_presses_today).publish_state(id(macropad_32s_key_8_count));
+          id(macropad_32e_key_8_count) += 1;
+          id(macropad_32e_key_8_presses_today).publish_state(id(macropad_32e_key_8_count));
           
           auto time = id(ha_time).now();
           char timestamp[64];
           snprintf(timestamp, sizeof(timestamp), "%02d/%02d/%04d %02d:%02d:%02d", 
                     time.month, time.day_of_month, time.year,
                     time.hour, time.minute, time.second);
-          id(macropad_32s_key_8_last_pressed).publish_state(timestamp);
+          id(macropad_32e_key_8_last_pressed).publish_state(timestamp);
 
   - platform: matrix_keypad
-    keypad_id: macropad_32s_keypad
-    id: macropad_32s_key_9
+    keypad_id: macropad_32e_keypad
+    id: macropad_32e_key_9
     key: "9"
-    name: "MacroPad 32S Key 9"
+    name: "MacroPad 32E Key 9"
     on_press:
       - lambda: |-
-          id(macropad_32s_key_9_count) += 1;
-          id(macropad_32s_key_9_presses_today).publish_state(id(macropad_32s_key_9_count));
+          id(macropad_32e_key_9_count) += 1;
+          id(macropad_32e_key_9_presses_today).publish_state(id(macropad_32e_key_9_count));
           
           auto time = id(ha_time).now();
           char timestamp[64];
           snprintf(timestamp, sizeof(timestamp), "%02d/%02d/%04d %02d:%02d:%02d", 
                     time.month, time.day_of_month, time.year,
                     time.hour, time.minute, time.second);
-          id(macropad_32s_key_9_last_pressed).publish_state(timestamp);
+          id(macropad_32e_key_9_last_pressed).publish_state(timestamp);
