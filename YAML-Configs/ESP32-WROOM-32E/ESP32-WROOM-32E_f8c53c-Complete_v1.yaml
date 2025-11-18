@@ -294,7 +294,7 @@ binary_sensor:
       - homeassistant.service:
           service: light.toggle
           data:
-            entity_id: light.kitchen_lights_switch
+            entity_id: 
   - platform: matrix_keypad
     keypad_id: macropad_32e_keypad
     id: macropad_32e_key_2
@@ -314,7 +314,7 @@ binary_sensor:
       - homeassistant.service:
           service: light.toggle
           data:
-            entity_id: light.bar_lights
+            entity_id: 
   - platform: matrix_keypad
     keypad_id: macropad_32e_keypad
     id: macropad_32e_key_3
@@ -334,7 +334,7 @@ binary_sensor:
       - homeassistant.service:
           service: light.toggle
           data:
-            entity_id: light.studio_lights
+            entity_id: 
   - platform: matrix_keypad
     keypad_id: macropad_32e_keypad
     id: macropad_32e_key_4
@@ -354,7 +354,7 @@ binary_sensor:
       - homeassistant.service:
           service: light.toggle
           data:
-            entity_id: light.office_lights_leds
+            entity_id: 
   - platform: matrix_keypad
     keypad_id: macropad_32e_keypad
     id: macropad_32e_key_5
@@ -374,7 +374,7 @@ binary_sensor:
       - homeassistant.service:
           service: light.toggle
           data:
-            entity_id: light.bathroom_lights_switch
+            entity_id: 
   - platform: matrix_keypad
     keypad_id: macropad_32e_keypad
     id: macropad_32e_key_6
@@ -394,7 +394,7 @@ binary_sensor:
       - homeassistant.service:
           service: light.toggle
           data:
-            entity_id: light.closet_lights_switch
+            entity_id: 
   - platform: matrix_keypad
     keypad_id: macropad_32e_keypad
     id: macropad_32e_key_7
@@ -414,7 +414,7 @@ binary_sensor:
       - homeassistant.service:
           service: script.turn_on
           data:
-            entity_id: script.studio_and_office_miami_vice_lights
+            entity_id: 
   - platform: matrix_keypad
     keypad_id: macropad_32e_keypad
     id: macropad_32e_key_8
