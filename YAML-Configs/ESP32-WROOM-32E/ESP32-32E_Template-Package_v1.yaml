@@ -1,0 +1,51 @@
+# ESPHome [FRIENDLY_NAME]
+# esphome-web-[MAC_ADDR]
+# File Description: External Package
+
+# [ ==== Substitutions ==== ] #
+substitutions:
+
+# [ ==== Global Values ==== ] #
+globals:
+
+# [ ==== Buttons ==== ] #
+button:
+  - platform: factory_reset
+    name: "Factory Reset - [FRIENDLY_NAME]"
+    icon: mdi:restart
+
+# [ ==== Lights ==== ] #
+light:
+  - platform: status_led
+    name: "Status LED - [FRIENDLY_NAME]"
+    icon: mdi:led-on
+    pin: 
+      number: GPIO2
+      ignore_strapping_warning: true
+
+# [ ==== Sensors ==== ] #
+sensor:
+
+# [ ==== Text Sensors ==== ] #
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "IP Address - [FRIENDLY_NAME]"
+      icon: mdi:ip-network
+  - platform: version
+    name: "ESPHome Version - [FRIENDLY_NAME]"
+    icon: mdi:car-esp
+
+# [ ==== Binary Sensors Configuration ==== ] #
+binary_sensor:
+  # ESP32 Boot Button
+  - platform: gpio
+    pin:
+      number: GPIO0  
+      ignore_strapping_warning: true
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    name: "Boot Button - [FRIENDLY_NAME]"
+    icon: mdi:gesture-tap-button
