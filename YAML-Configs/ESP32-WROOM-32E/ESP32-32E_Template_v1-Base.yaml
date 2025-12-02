@@ -7,7 +7,7 @@ esphome:
 
 # [ ==== PCB Board Info ==== ] #
 esp32:
-  board: esp32dev
+  variant: esp32dev
   framework:
     type: esp-idf
 
