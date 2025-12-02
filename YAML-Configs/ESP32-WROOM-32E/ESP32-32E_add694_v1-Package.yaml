@@ -3,10 +3,10 @@
 # File Description: External Package
 
 # [ ==== Substitutions ==== ] #
-substitutions:
+# substitutions:
 
 # [ ==== Global Values ==== ] #
-globals:
+# globals:
 
 # [ ==== Buttons ==== ] #
 button:
@@ -24,7 +24,7 @@ light:
       ignore_strapping_warning: true
 
 # [ ==== Sensors ==== ] #
-sensor:
+# sensor:
 
 # [ ==== Text Sensors ==== ] #
 text_sensor:
