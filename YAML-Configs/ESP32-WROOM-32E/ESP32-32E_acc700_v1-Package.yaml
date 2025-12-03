@@ -1,0 +1,51 @@
+# ESPHome ESPHome Rotary Screen
+# esphome-web-acc700
+# File Description: External Package
+
+# [ ==== Substitutions ==== ] #
+# substitutions:
+
+# [ ==== Global Values ==== ] #
+# globals:
+
+# [ ==== Buttons ==== ] #
+button:
+  - platform: factory_reset
+    name: "Factory Reset - Rotary Screen"
+    icon: mdi:restart
+
+# [ ==== Lights ==== ] #
+light:
+  - platform: status_led
+    name: "Status LED - Rotary Screen"
+    icon: mdi:led-on
+    pin: 
+      number: GPIO2
+      ignore_strapping_warning: true
+
+# [ ==== Sensors ==== ] #
+sensor:
+
+# [ ==== Text Sensors ==== ] #
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "IP Address - Rotary Screen"
+      icon: mdi:ip-network
+  - platform: version
+    name: "ESPHome Version - Rotary Screen"
+    icon: mdi:car-esp
+
+# [ ==== Binary Sensors Configuration ==== ] #
+binary_sensor:
+  # ESP32 Boot Button
+  - platform: gpio
+    pin:
+      number: GPIO0  
+      ignore_strapping_warning: true
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    name: "Boot Button - Rotary Screen"
+    icon: mdi:gesture-tap-button
