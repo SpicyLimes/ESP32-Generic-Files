@@ -8,44 +8,145 @@
 # [ ==== Global Values ==== ] #
 # globals:
 
-# [ ==== Buttons ==== ] #
-button:
-  - platform: factory_reset
-    name: "Factory Reset - ESPHome LED Thermometer"
-    icon: mdi:restart
-
-# [ ==== Lights ==== ] #
-light:
-  - platform: status_led
-    name: "Status LED - ESPHome LED Thermometer"
-    icon: mdi:led-on
-    pin: 
-      number: GPIO2
-      ignore_strapping_warning: true
-
 # [ ==== Sensors ==== ] #
-# sensor:
+sensor:
+  - platform: uptime
+    name: "Uptime - LED Thermometer"
+    update_interval: 60s
+#  - platform: wifi_signal
+#    name: "WiFi Signal - LED Thermometer"
+#    update_interval: 60s
+#  - platform: internal_temperature
+#    name: "Temperature - LED Thermometer"
+#    update_interval: 60s
 
 # [ ==== Text Sensors ==== ] #
 text_sensor:
   - platform: wifi_info
     ip_address:
-      name: "IP Address - ESPHome LED Thermometer"
+      name: "IP Address - LED Thermometer"
       icon: mdi:ip-network
   - platform: version
-    name: "ESPHome Version - ESPHome LED Thermometer"
+    name: "ESPHome Version - LED Thermometer"
     icon: mdi:car-esp
 
-# [ ==== Binary Sensors Configuration ==== ] #
+# [ ==== Binary Sensors ==== ] #
 binary_sensor:
-  # ESP32 Boot Button
   - platform: gpio
     pin:
-      number: GPIO0  
+      number: GPIO0  # ESP32 Boot Button
       ignore_strapping_warning: true
       inverted: true
       mode:
         input: true
         pullup: true
-    name: "Boot Button - ESPHome LED Thermometer"
     icon: mdi:gesture-tap-button
+    name: "LED Strip Toggle - LED Thermometer"
+    on_press:
+      then:
+        - light.turn_off: led_strip
+#        - homeassistant.service:
+#            service: automation.toggle
+#            data:
+#              entity_id: automation.esp32_weather_temp_led_display
+
+# [ ==== Buttons ==== ] #
+button:
+  - platform: factory_reset
+    name: "Factory Reset - LED Thermometer"
+    icon: mdi:restart
+
+# [ ==== Lights ==== ] #
+light:
+  - platform: status_led
+    name: "Status LED - LED Thermometer"
+    icon: mdi:led-on
+    pin: 
+      number: GPIO2
+      ignore_strapping_warning: true
+  - platform: esp32_rmt_led_strip
+    pin: GPIO13
+    num_leds: 7
+    chipset: WS2812
+    rgb_order: GRB
+    name: "LED Strip - LED Thermometer"
+    id: led_strip
+    icon: mdi:led-strip
+    effects:
+      - addressable_scan:
+      - addressable_scan:
+          name: Scan Effect With Custom Values
+          move_interval: 100ms
+          scan_width: 1
+  # Map LEDs into Ind LEDs
+  - platform: partition
+    name: "LED 1 - LED Thermometer"
+    icon: mdi:numeric-1-circle
+    segments:
+      - id: led_strip
+        from: 0
+        to: 0
+  - platform: partition
+    name: "LED 2 - LED Thermometer"
+    icon: mdi:numeric-2-circle
+    segments:
+      - id: led_strip
+        from: 1
+        to: 1
+  - platform: partition
+    name: "LED 3 - LED Thermometer"
+    icon: mdi:numeric-3-circle
+    segments:
+      - id: led_strip
+        from: 2
+        to: 2
+  - platform: partition
+    name: "LED 4 - LED Thermometer"
+    icon: mdi:numeric-4-circle
+    segments:
+      - id: led_strip
+        from: 3
+        to: 3
+  - platform: partition
+    name: "LED 5 - LED Thermometer"
+    icon: mdi:numeric-5-circle
+    segments:
+      - id: led_strip
+        from: 4
+        to: 5
+  - platform: partition
+    name: "LED 6 - LED Thermometer"
+    icon: mdi:numeric-6-circle
+    segments:
+      - id: led_strip
+        from: 5
+        to: 5
+  - platform: partition
+    name: "LED 7 - LED Thermometer"
+    icon: mdi:numeric-7-circle
+    segments:
+      - id: led_strip
+        from: 6
+        to: 6
+  # Map LEDs into Segments
+  - platform: partition
+    name: "LED Group 1 - LED Thermometer"
+    icon: mdi:numeric-1-box-multiple
+    segments:
+      - id: led_strip
+        from: 0
+        to: 1
+  - platform: partition
+    name: "LED Group 2 - LED Thermometer"
+    icon: mdi:numeric-2-box-multiple
+    segments:
+      - id: led_strip
+        from: 2
+        to: 4
+  - platform: partition
+    name: "LED Group 3 - LED Thermometer"
+    icon: mdi:numeric-3-box-multiple
+    segments:
+      - id: led_strip
+        from: 5
+        to: 6
