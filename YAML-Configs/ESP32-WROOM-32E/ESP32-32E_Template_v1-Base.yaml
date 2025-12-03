@@ -41,11 +41,11 @@ time:
 
 # [ ============================== External Packages ============================== ] #
 
-packages:
- remote_package_files:
-   url: https://github.com/SpicyLimes/ESP32-S3-Files
-   files: YAML-Configs/ESP32-WROOM-32E/ESP32-[BOARD]_[MAC_ADDR]-[BASE_PACKAGE]_v[VERSION].yaml
-   ref: main
-   refresh: 0s
+# packages:
+# remote_package_files:
+#   url: https://github.com/SpicyLimes/[REPO]
+#   files: YAML-Configs/[DEVICE]/[CONFIG_FILE].yaml
+#   ref: main
+#   refresh: 0s
 
 # [ ============================================================================ ] #
