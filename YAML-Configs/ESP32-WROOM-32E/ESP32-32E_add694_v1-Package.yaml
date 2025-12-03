@@ -65,7 +65,9 @@ light:
       number: GPIO2
       ignore_strapping_warning: true
   - platform: esp32_rmt_led_strip
-    pin: GPIO15
+    pin: 
+      number: GPIO15
+      ignore_strapping_warning: true
     num_leds: 7
     chipset: WS2812
     rgb_order: GRB
