@@ -19,8 +19,12 @@ ota:
 
 # [ ==== WiFi Info ==== ] #
 wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
+  networks:
+    - ssid: !secret wifi_ssid
+      password: !secret wifi_password
+    - ssid: !secret house_wifi_ssid
+      password: !secret house_wifi_password
+  reboot_timeout: 0s
   fast_connect: true
 
 # [ ==== Web Server Info ==== ] #
