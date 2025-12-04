@@ -44,12 +44,6 @@ light:
       number: GPIO2
       ignore_strapping_warning: true
 
-# [ ==== Status LED ==== ] #
-status_led:
-  pin:
-    number: GPIO2
-    inverted: false
-
 # [ ==== Text Sensors ==== ] #
 text_sensor:
   - platform: wifi_info
