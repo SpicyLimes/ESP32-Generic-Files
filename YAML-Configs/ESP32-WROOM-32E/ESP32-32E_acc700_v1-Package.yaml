@@ -1,20 +1,41 @@
-# ESPHome ESPHome Rotary Screen
+# ESPHome ESPHome OLED Remote
 # esphome-web-acc700
 # File Description: External Package
 
 # [ ==== Substitutions ==== ] #
 # substitutions:
 
-# [ ==== Global Values ==== ] #
-# globals:
+# [ ==== Font Info ==== ] #
+font:
+  - file: "gfonts://Roboto"
+    id: font_small
+    size: 10
+  - file: "gfonts://Roboto"
+    id: font_medium
+    size: 14
 
-# [ ==== Buttons ==== ] #
+# [ ==== I2C Bus Info ==== ] #
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+  scan: true
+  id: bus_a
+  frequency: 400kHz
+
+# [ ==== Global Variables ==== ] #
+globals:
+  - id: rotary_value
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+# [ ==== Button Info ==== ] #
 button:
   - platform: factory_reset
     name: "Factory Reset - Rotary Screen"
     icon: mdi:restart
 
-# [ ==== Lights ==== ] #
+# [ ==== Light Info ==== ] #
 light:
   - platform: status_led
     name: "Status LED - Rotary Screen"
@@ -23,8 +44,11 @@ light:
       number: GPIO2
       ignore_strapping_warning: true
 
-# [ ==== Sensors ==== ] #
-sensor:
+# [ ==== Status LED ==== ] #
+status_led:
+  pin:
+    number: GPIO2
+    inverted: false
 
 # [ ==== Text Sensors ==== ] #
 text_sensor:
@@ -36,7 +60,34 @@ text_sensor:
     name: "ESPHome Version - Rotary Screen"
     icon: mdi:car-esp
 
-# [ ==== Binary Sensors Configuration ==== ] #
+# [ ==== Sensor Info ==== ] #
+sensor:
+  - platform: rotary_encoder
+    name: "Rotary Encoder"
+    id: rotaryencoder
+    pin_a:
+      number: GPIO19
+      mode:
+        input: true
+        pullup: true
+    pin_b:
+      number: GPIO23
+      mode:
+        input: true
+        pullup: true
+    resolution: 2
+    min_value: 0
+    max_value: 100
+    on_value:
+      then:
+        - globals.set:
+            id: rotary_value
+            value: !lambda 'return (int)x;'
+        - logger.log:
+            format: "Rotary encoder value: %d"
+            args: ['(int)x']
+
+# [ ==== Binary Sensor Info ==== ] #
 binary_sensor:
   # ESP32 Boot Button
   - platform: gpio
@@ -49,3 +100,83 @@ binary_sensor:
         pullup: true
     name: "Boot Button - Rotary Screen"
     icon: mdi:gesture-tap-button
+  - platform: gpio
+    pin:
+      number: GPIO16
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    name: "Confirm Button"
+    id: confirm_button
+    on_press:
+      then:
+        - logger.log: "Confirm button pressed"
+    on_release:
+      then:
+        - logger.log: "Confirm button released"
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+  - platform: gpio
+    pin:
+      number: GPIO17
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    name: "Back Button"
+    id: back_button
+    on_press:
+      then:
+        - logger.log: "Back button pressed"
+    on_release:
+      then:
+        - logger.log: "Back button released"
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+  - platform: gpio
+    pin:
+      number: GPIO18
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    name: "Rotary Push Button"
+    id: rotary_push_button
+    on_press:
+      then:
+        - logger.log: "Rotary encoder pushed"
+        - globals.set:
+            id: rotary_value
+            value: '0'
+    on_release:
+      then:
+        - logger.log: "Rotary encoder released"
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+
+# [ ==== Display Info ==== ] #
+display:
+  - platform: ssd1306_i2c
+    model: "SH1106 128x64"
+    address: 0x3C
+    id: oled_display
+    update_interval: 100ms
+    lambda: |-
+      // Display title
+      it.printf(64, 0, id(font_medium), TextAlign::TOP_CENTER, "ESPHome");
+      
+      // Display current time if available
+      if (id(ha_time).now().is_valid()) {
+        it.strftime(64, 16, id(font_small), TextAlign::TOP_CENTER, "%H:%M:%S", id(ha_time).now());
+      }
+      
+      // Display rotary encoder value
+      it.printf(0, 30, id(font_small), "Encoder: %d", id(rotary_value));
+      
+      // Display button states
+      it.printf(0, 42, id(font_small), "Confirm: %s", id(confirm_button).state ? "ON" : "OFF");
+      it.printf(0, 54, id(font_small), "Back: %s", id(back_button).state ? "ON" : "OFF");
