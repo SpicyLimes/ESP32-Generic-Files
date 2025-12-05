@@ -39,8 +39,8 @@ button:
 # [ ==== Light Info ==== ] #
 light:
   - platform: status_led
-    id: status_led  # Ensure ID matches for menu linking
-    name: "Status LED - Rotary Screen"
+    id: onboard_led  # Ensure ID matches for menu linking
+    name: "Status LED - OLED Rotary Screen"
     icon: mdi:led-on
     pin: 
       number: GPIO2
@@ -132,7 +132,7 @@ binary_sensor:
         input: true
         pullup: true
       inverted: true
-    name: "Confirm Button"
+    name: "Confirm Button - OLED Rotary Screen"
     icon: mdi:location-enter
     id: confirm_button
     on_press:
@@ -153,7 +153,7 @@ binary_sensor:
         input: true
         pullup: true
       inverted: true
-    name: "Back Button"
+    name: "Back Button - OLED Rotary Screen"
     icon: mdi:arrow-left-circle
     id: back_button
     on_press:
@@ -174,7 +174,7 @@ binary_sensor:
         input: true
         pullup: true
       inverted: true
-    name: "Rotary Push Button"
+    name: "Rotary Button - OLED Rotary Screen"
     icon: mdi:cursor-default-click
     id: rotary_push_button
     on_press:
@@ -208,7 +208,7 @@ graphical_display_menu:
           text: "Back"
         - type: switch  # Example: Toggle the status LED
           text: "Status LED"
-          switch_id: status_led  # Link to your existing light (rename if needed)
+          switch_id: onboard_led  # Link to your existing light (rename if needed)
         - type: number
           text: "Rotary Max"
           number_id: rotary_max  # Example adjustable value
