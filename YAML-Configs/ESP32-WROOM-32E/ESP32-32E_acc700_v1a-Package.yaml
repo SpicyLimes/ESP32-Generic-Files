@@ -1,5 +1,5 @@
 # ESPHome ESPHome OLED Rotary Screen
-# Version: 2
+# Version: 1a
 # esphome-web-acc700 
 # File Description: External Package
 
@@ -173,6 +173,18 @@ binary_sensor:
       - delayed_on: 10ms
       - delayed_off: 10ms
 
+# [ ==== Switch Info (for Menu Integration) ==== ] #
+switch:
+  - platform: template
+    id: onboard_led_switch
+    name: "Onboard LED Switch"
+    optimistic: true
+    lambda: return id(onboard_led).current_values.is_on();
+    turn_on_action:
+      - light.turn_on: onboard_led
+    turn_off_action:
+      - light.turn_off: onboard_led
+
 # [ ==== Graphical Display Menu ==== ] #
 graphical_display_menu:
   id: main_menu
@@ -192,7 +204,7 @@ graphical_display_menu:
           text: "Back"
         - type: switch  # Example: Toggle the status LED
           text: "Status LED"
-          id: onboard_led  # Link to your existing light (rename if needed)
+          switch_id: onboard_led_switch  # Link to the template switch
     - type: command
       text: "Exit"
       on_value:
@@ -216,4 +228,3 @@ display:
         it.printf(0, 54, id(font_small), TextAlign::TOP_LEFT, "%s", id(confirm_button).state ? "Enter" : "--");
         it.printf(0, 54, id(font_small), TextAlign::TOP_RIGHT, "%s", id(back_button).state ? "Back" : "--");
       }
-
