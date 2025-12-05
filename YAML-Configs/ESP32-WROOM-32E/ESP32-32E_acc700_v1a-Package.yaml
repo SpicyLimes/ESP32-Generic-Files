@@ -145,7 +145,7 @@ binary_sensor:
           condition:
             display_menu.is_active: main_menu
           then:
-            - display_menu.back: main_menu
+            - display_menu.hide: main_menu
           else:
             - logger.log: "Menu is hidden"
     filters:
