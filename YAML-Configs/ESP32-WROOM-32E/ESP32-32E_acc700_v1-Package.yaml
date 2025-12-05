@@ -162,12 +162,7 @@ display:
     lambda: |-
       // Display title
       it.printf(64, 0, id(font_medium), TextAlign::TOP_CENTER, "ESPHome");
-      
-      // Display current time if available
-      if (id(ha_time).now().is_valid()) {
-        it.strftime(64, 16, id(font_small), TextAlign::TOP_CENTER, "%H:%M:%S", id(ha_time).now());
-      }
-      
+
       // Display rotary encoder value
       it.printf(0, 30, id(font_small), "Encoder: %d", id(rotary_value));
       
