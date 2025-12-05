@@ -1,0 +1,239 @@
+# ESPHome ESPHome OLED Rotary Screen
+# Version: 2
+# esphome-web-acc700 
+# File Description: External Package
+
+# [ ==== Substitutions ==== ] #
+# substitutions:
+
+# [ ==== Font Info ==== ] #
+font:
+  - file: "gfonts://Roboto"
+    id: font_small
+    size: 10
+  - file: "gfonts://Roboto"
+    id: font_medium
+    size: 14
+
+# [ ==== I2C Bus Info ==== ] #
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+  scan: true
+  id: bus_a
+  frequency: 400kHz
+
+# [ ==== Global Variables ==== ] #
+globals:
+  - id: rotary_value
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+# [ ==== Button Info ==== ] #
+button:
+  - platform: factory_reset
+    name: "Factory Reset - OLED Rotary Screen"
+    icon: mdi:restart
+
+# [ ==== Light Info ==== ] #
+light:
+  - platform: status_led
+    id: status_led  # Ensure ID matches for menu linking
+    name: "Status LED - Rotary Screen"
+    icon: mdi:led-on
+    pin: 
+      number: GPIO2
+      ignore_strapping_warning: true
+
+# [ ==== Number Info ==== ] #
+number:
+  - platform: template
+    id: rotary_max
+    name: "Rotary Max Value - OLED Rotary Screen"
+    icon: mdi:knob
+    min_value: 50
+    max_value: 200
+    step: 10
+    optimistic: true
+    set_action:
+      then:
+        - sensor.rotary_encoder.set_max_value:
+            id: rotaryencoder
+            value: !lambda 'return x;'
+
+# [ ==== Text Sensors ==== ] #
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "IP Address - OLED Rotary Screen"
+      icon: mdi:ip-network
+  - platform: version
+    name: "ESPHome Version - OLED Rotary Screen"
+    icon: mdi:car-esp
+
+# [ ==== Sensor Info ==== ] #
+sensor:
+  - platform: rotary_encoder
+    name: "Rotary Encoder"
+    icon: mdi:knob
+    id: rotaryencoder
+    pin_a:
+      number: GPIO19
+      mode:
+        input: true
+        pullup: true
+    pin_b:
+      number: GPIO23
+      mode:
+        input: true
+        pullup: true
+    resolution: 2
+    min_value: 0
+    max_value: 100
+    on_clockwise:
+      - if:
+          condition:
+            display_menu.is_active: main_menu
+          then:
+            - display_menu.down: main_menu
+    on_anticlockwise:
+      - if:
+          condition:
+            display_menu.is_active: main_menu
+          then:
+            - display_menu.up: main_menu
+    on_value:
+      then:
+        - globals.set:
+            id: rotary_value
+            value: !lambda 'return (int)x;'
+        - logger.log:
+            format: "Rotary encoder value: %d"
+            args: ['(int)x']
+
+# [ ==== Binary Sensor Info ==== ] #
+binary_sensor:
+  # ESP32 Boot Button
+  - platform: gpio
+    pin:
+      number: GPIO0  
+      ignore_strapping_warning: true
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    name: "Boot Button - OLED Rotary Screen"
+    icon: mdi:gesture-tap-button
+  - platform: gpio
+    pin:
+      number: GPIO16
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    name: "Confirm Button"
+    icon: mdi:location-enter
+    id: confirm_button
+    on_press:
+      - if:
+          condition:
+            display_menu.is_active: main_menu
+          then:
+            - display_menu.enter: main_menu
+          else:
+            - display_menu.show: main_menu
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+  - platform: gpio
+    pin:
+      number: GPIO17
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    name: "Back Button"
+    icon: mdi:arrow-left-circle
+    id: back_button
+    on_press:
+      - if:
+          condition:
+            display_menu.is_active: main_menu
+          then:
+            - display_menu.back: main_menu
+          else:
+            - logger.log: "Menu is hidden"
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+  - platform: gpio
+    pin:
+      number: GPIO18
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    name: "Rotary Push Button"
+    icon: mdi:cursor-default-click
+    id: rotary_push_button
+    on_press:
+      - if:
+          condition:
+            display_menu.is_active: main_menu
+          then:
+            - display_menu.enter: main_menu
+          else:
+            - display_menu.show: main_menu
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+
+# [ ==== Graphical Display Menu ==== ] #
+graphical_display_menu:
+  id: main_menu
+  display: oled_display  # Attach for Pop Up Mode (full-screen when active)
+  font: font_small  # Use your small font for menu items
+  foreground_color: COLOR_ON
+  background_color: COLOR_OFF
+  active: false  # Start hidden
+  mode: rotary  # Suited for EC11
+  items:  # Example menu structure
+    - type: label
+      text: "Welcome to Menu"
+    - type: menu
+      text: "Settings"
+      items:
+        - type: back
+          text: "Back"
+        - type: switch  # Example: Toggle the status LED
+          text: "Status LED"
+          switch_id: status_led  # Link to your existing light (rename if needed)
+        - type: number
+          text: "Rotary Max"
+          number_id: rotary_max  # Example adjustable value
+          immediate_edit: true  # Edit directly with rotary
+    - type: command
+      text: "Exit"
+      on_value:
+        then:
+          - display_menu.hide: main_menu
+
+# [ ==== Display Info ==== ] #
+display:
+  - platform: ssd1306_i2c
+    model: "SH1106 128x64"
+    address: 0x3C
+    id: oled_display
+    update_interval: 100ms
+    lambda: |-
+      if (id(main_menu).is_active()) {
+        // Menu handles rendering
+      } else {
+        // Default content
+        it.printf(64, 0, id(font_medium), TextAlign::TOP_CENTER, "ESPHome");
+        it.printf(0, 15, id(font_small), TextAlign::TOP_CENTER, "Turned: %d Deg", id(rotary_value));
+        it.printf(0, 54, id(font_small), TextAlign::TOP_LEFT, "%s", id(confirm_button).state ? "Enter" : "--");
+        it.printf(0, 54, id(font_small), TextAlign::TOP_RIGHT, "%s", id(back_button).state ? "Back" : "--");
+      }
+
