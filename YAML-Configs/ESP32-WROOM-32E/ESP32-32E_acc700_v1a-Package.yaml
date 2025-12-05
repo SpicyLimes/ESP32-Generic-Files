@@ -192,7 +192,7 @@ graphical_display_menu:
           text: "Back"
         - type: switch  # Example: Toggle the status LED
           text: "Status LED"
-          switch_id: onboard_led  # Link to your existing light (rename if needed)
+          id: onboard_led  # Link to your existing light (rename if needed)
     - type: command
       text: "Exit"
       on_value:
