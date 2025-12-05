@@ -46,22 +46,6 @@ light:
       number: GPIO2
       ignore_strapping_warning: true
 
-# [ ==== Number Info ==== ] #
-number:
-  - platform: template
-    id: rotary_max
-    name: "Rotary Max Value - OLED Rotary Screen"
-    icon: mdi:knob
-    min_value: 50
-    max_value: 200
-    step: 10
-    optimistic: true
-    set_action:
-      then:
-        - sensor.rotary_encoder.set_max_value:
-            id: rotaryencoder
-            value: !lambda 'return x;'
-
 # [ ==== Text Sensors ==== ] #
 text_sensor:
   - platform: wifi_info
@@ -200,7 +184,7 @@ graphical_display_menu:
   mode: rotary  # Suited for EC11
   items:  # Example menu structure
     - type: label
-      text: "Welcome to Menu"
+      text: "Main Menu"
     - type: menu
       text: "Settings"
       items:
@@ -209,10 +193,6 @@ graphical_display_menu:
         - type: switch  # Example: Toggle the status LED
           text: "Status LED"
           switch_id: onboard_led  # Link to your existing light (rename if needed)
-        - type: number
-          text: "Rotary Max"
-          number_id: rotary_max  # Example adjustable value
-          immediate_edit: true  # Edit directly with rotary
     - type: command
       text: "Exit"
       on_value:
