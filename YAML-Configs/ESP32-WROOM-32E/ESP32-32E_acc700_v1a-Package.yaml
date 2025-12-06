@@ -8,6 +8,12 @@
 # [ ==== Substitutions ==== ] #
 # substitutions:
 
+# [ ==== Time Info ==== ] #
+time:
+  - platform: homeassistant
+    id: ha_time
+    timezone: "America/Chicago"
+
 # [ ==== Font Info ==== ] #
 font:
   - file: "gfonts://Roboto"
@@ -37,11 +43,16 @@ button:
   - platform: factory_reset
     name: "Factory Reset - OLED Rotary Screen"
     icon: mdi:restart
+  - platform: restart
+    id: restart_button
+    name: "Reboot - OLED Rotary Screen"
+    entity_category: config
+    icon: mdi:restart
 
 # [ ==== Light Info ==== ] #
 light:
   - platform: status_led
-    id: onboard_led  # Ensure ID matches for menu linking
+    id: onboard_led
     name: "Status LED - OLED Rotary Screen"
     icon: mdi:led-on
     pin: 
@@ -58,6 +69,19 @@ text_sensor:
     name: "ESPHome Version - OLED Rotary Screen"
     icon: mdi:car-esp
 
+# [ ==== Switch (needed for menu) ==== ] #
+switch:
+  - platform: template
+    name: "Onboard LED Switch"
+    id: onboard_led_switch
+    optimistic: true
+    lambda: >-
+      return id(onboard_led).current_values.is_on();
+    turn_on_action:
+      - light.turn_on: onboard_led
+    turn_off_action:
+      - light.turn_off: onboard_led
+
 # [ ==== Sensor Info ==== ] #
 sensor:
   - platform: rotary_encoder
@@ -66,17 +90,11 @@ sensor:
     id: rotaryencoder
     pin_a:
       number: GPIO19
-      mode:
-        input: true
-        pullup: true
+      mode: { input: true, pullup: true }
     pin_b:
       number: GPIO23
-      mode:
-        input: true
-        pullup: true
+      mode: { input: true, pullup: true }
     resolution: 2
-    min_value: 0
-    max_value: 100
     on_clockwise:
       - if:
           condition:
@@ -90,20 +108,88 @@ sensor:
           then:
             - display_menu.up: main_menu
     on_value:
-      then:
-        - globals.set:
-            id: rotary_value
-            value: !lambda 'return (int)x;'
-        - logger.log:
-            format: "Rotary encoder value: %d"
-            args: ['(int)x']
+      - globals.set:
+          id: rotary_value
+          value: !lambda 'return (int)x;'
 
 # [ ==== Binary Sensor Info ==== ] #
 binary_sensor:
-  # ESP32 Boot Button
+  # Confirm Button (show menu or enter/select)
   - platform: gpio
     pin:
-      number: GPIO0  
+      number: GPIO16
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    name: "Confirm Button - OLED Rotary Screen"
+    icon: mdi:location-enter
+    id: confirm_button
+    on_press:
+      then:
+        - if:
+            condition:
+              display_menu.is_active: main_menu
+            then:
+              - display_menu.enter: main_menu
+            else:
+              - display_menu.show: main_menu
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+
+  # Back Button (up one level or hide if at root)
+  - platform: gpio
+    pin:
+      number: GPIO17
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    name: "Back Button - OLED Rotary Screen"
+    icon: mdi:arrow-left-circle
+    id: back_button
+    on_press:
+      then:
+        - if:
+            condition:
+              display_menu.is_active: main_menu
+            then:
+              - display_menu.up: main_menu  # Navigates up or hides at root
+            else:
+              - logger.log: "Menu is hidden"
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+
+  # Rotary Push Button (same as Confirm for redundancy)
+  - platform: gpio
+    pin:
+      number: GPIO18
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    name: "Rotary Push Button - OLED Rotary Screen"
+    icon: mdi:cursor-default-click
+    id: rotary_push_button
+    on_press:
+      then:
+        - if:
+            condition:
+              display_menu.is_active: main_menu
+            then:
+              - display_menu.enter: main_menu
+            else:
+              - display_menu.show: main_menu
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+
+  # Boot Button (keep your original)
+  - platform: gpio
+    pin:
+      number: GPIO0
       ignore_strapping_warning: true
       inverted: true
       mode:
@@ -111,107 +197,33 @@ binary_sensor:
         pullup: true
     name: "Boot Button - OLED Rotary Screen"
     icon: mdi:gesture-tap-button
-  - platform: gpio
-    pin:
-      number: GPIO16
-      mode:
-        input: true
-        pullup: true
-      inverted: true
-    name: "Confirm Button - OLED Rotary Screen"
-    icon: mdi:location-enter
-    id: confirm_button
-    on_press:
-      - if:
-          condition:
-            display_menu.is_active: main_menu
-          then:
-            - display_menu.enter: main_menu
-          else:
-            - display_menu.show: main_menu
-    filters:
-      - delayed_on: 10ms
-      - delayed_off: 10ms
-  - platform: gpio
-    pin:
-      number: GPIO17
-      mode:
-        input: true
-        pullup: true
-      inverted: true
-    name: "Back Button - OLED Rotary Screen"
-    icon: mdi:arrow-left-circle
-    id: back_button
-    on_press:
-      - if:
-          condition:
-            display_menu.is_active: main_menu
-          then:
-            - display_menu.hide: main_menu
-          else:
-            - logger.log: "Menu is hidden"
-    filters:
-      - delayed_on: 10ms
-      - delayed_off: 10ms
-  - platform: gpio
-    pin:
-      number: GPIO18
-      mode:
-        input: true
-        pullup: true
-      inverted: true
-    name: "Rotary Button - OLED Rotary Screen"
-    icon: mdi:cursor-default-click
-    id: rotary_push_button
-    on_press:
-      - if:
-          condition:
-            display_menu.is_active: main_menu
-          then:
-            - display_menu.enter: main_menu
-          else:
-            - display_menu.show: main_menu
-    filters:
-      - delayed_on: 10ms
-      - delayed_off: 10ms
-
-# [ ==== Switch Info (for Menu Integration) ==== ] #
-switch:
-  - platform: template
-    id: onboard_led_switch
-    name: "Onboard LED Switch"
-    optimistic: true
-    lambda: return id(onboard_led).current_values.is_on();
-    turn_on_action:
-      - light.turn_on: onboard_led
-    turn_off_action:
-      - light.turn_off: onboard_led
 
 # [ ==== Graphical Display Menu ==== ] #
 graphical_display_menu:
   id: main_menu
-  display: oled_display  # Attach for Pop Up Mode (full-screen when active)
-  font: font_small  # Use your small font for menu items
-  foreground_color: COLOR_ON
-  background_color: COLOR_OFF
-  active: false  # Start hidden
-  mode: rotary  # Suited for EC11
-  items:  # Example menu structure
+  display: oled_display
+  font: font_small
+  active: false
+  items:
     - type: label
-      text: "Main Menu"
+      text: "ESPHome Remote"
     - type: menu
       text: "Settings"
       items:
         - type: back
-          text: "Back"
-        - type: switch  # Example: Toggle the status LED
+          text: "< Back"
+        - type: switch
           text: "Status LED"
-          switch_id: onboard_led_switch  # Link to the template switch
+          switch: onboard_led_switch
+        - type: command
+          text: "Restart Device"
+          on_value:
+            then:
+              - button.press: restart_button
     - type: command
-      text: "Exit"
+      text: "Exit Menu"
       on_value:
-        then:
-          - display_menu.hide: main_menu
+       - display_menu.hide: main_menu
 
 # [ ==== Display Info ==== ] #
 display:
@@ -226,7 +238,7 @@ display:
       } else {
         // Default content
         it.printf(64, 0, id(font_medium), TextAlign::TOP_CENTER, "ESPHome");
-        it.printf(0, 15, id(font_small), TextAlign::TOP_CENTER, "Turned: %d Deg", id(rotary_value));
-        it.printf(0, 54, id(font_small), TextAlign::TOP_LEFT, "%s", id(confirm_button).state ? "Enter" : "--");
-        it.printf(0, 54, id(font_small), TextAlign::TOP_RIGHT, "%s", id(back_button).state ? "Back" : "--");
+        it.printf(64, 15, id(font_small), TextAlign::TOP_CENTER, "Turned: %d Deg", id(rotary_value));
+        it.printf(0, 54, id(font_small), TextAlign::TOP_CENTER, "%s", id(confirm_button).state ? "Enter" : "X");
+        it.printf(100, 54, id(font_small), TextAlign::TOP_CENTER, "%s", id(back_button).state ? "Back" : "X");
       }
