@@ -1,0 +1,264 @@
+# [ ==== esphome-web-acc700.yaml ==== ] #
+esphome:
+  name: esphome-web-acc700
+  friendly_name: ESPHome OLED Rotary Screen
+  min_version: 2025.10.0
+  name_add_mac_suffix: false
+
+# [ ==== PCB Board Info ==== ] #
+esp32:
+  variant: esp32
+  framework:
+    type: esp-idf
+
+# [ ==== Logging, API, and Updates ==== ] #
+logger:
+api:
+ota:
+  - platform: esphome
+
+# [ ==== WiFi Info ==== ] #
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  fast_connect: true
+
+# [ ==== Web Server Info ==== ] #
+web_server:
+  port: 80
+  version: 3
+
+# [ ==== Time Info ==== ] #
+time:
+  - platform: homeassistant
+    id: ha_time
+    timezone: "America/Chicago"
+
+# [ ==== Font Info ==== ] #
+font:
+  - file: "gfonts://Roboto"
+    id: font_small
+    size: 10
+  - file: "gfonts://Roboto"
+    id: font_medium
+    size: 14
+
+# [ ==== I2C Bus Info ==== ] #
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+  scan: true
+  id: bus_a
+  frequency: 400kHz
+
+# [ ==== Global Variables ==== ] #
+globals:
+  - id: rotary_value
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+# [ ==== Button Info ==== ] #
+button:
+  - platform: factory_reset
+    name: "Factory Reset - OLED Rotary Screen"
+    icon: mdi:restart
+  - platform: restart
+    id: restart_button
+    name: "Reboot - OLED Rotary Screen"
+    entity_category: config
+    icon: mdi:restart
+
+# [ ==== Light Info ==== ] #
+light:
+  - platform: status_led
+    id: onboard_led
+    name: "Status LED - OLED Rotary Screen"
+    icon: mdi:led-on
+    pin: 
+      number: GPIO2
+      ignore_strapping_warning: true
+
+# [ ==== Text Sensors ==== ] #
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "IP Address - OLED Rotary Screen"
+      icon: mdi:ip-network
+  - platform: version
+    name: "ESPHome Version - OLED Rotary Screen"
+    icon: mdi:car-esp
+
+# [ ==== Switch (needed for menu) ==== ] #
+switch:
+  - platform: template
+    name: "Onboard LED Switch"
+    id: onboard_led_switch
+    optimistic: true
+    lambda: >-
+      return id(onboard_led).current_values.is_on();
+    turn_on_action:
+      - light.turn_on: onboard_led
+    turn_off_action:
+      - light.turn_off: onboard_led
+
+# [ ==== Sensor Info ==== ] #
+sensor:
+  - platform: rotary_encoder
+    name: "Rotary Encoder"
+    icon: mdi:knob
+    id: rotaryencoder
+    pin_a:
+      number: GPIO19
+      mode: { input: true, pullup: true }
+    pin_b:
+      number: GPIO23
+      mode: { input: true, pullup: true }
+    resolution: 2
+    on_clockwise:
+      - if:
+          condition:
+            display_menu.is_active: main_menu
+          then:
+            - display_menu.down: main_menu
+    on_anticlockwise:
+      - if:
+          condition:
+            display_menu.is_active: main_menu
+          then:
+            - display_menu.up: main_menu
+    on_value:
+      - globals.set:
+          id: rotary_value
+          value: !lambda 'return (int)x;'
+
+# [ ==== Binary Sensor Info ==== ] #
+binary_sensor:
+  # Confirm Button (show menu or enter/select)
+  - platform: gpio
+    pin:
+      number: GPIO16
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    name: "Confirm Button - OLED Rotary Screen"
+    icon: mdi:location-enter
+    id: confirm_button
+    on_press:
+      then:
+        - if:
+            condition:
+              display_menu.is_active: main_menu
+            then:
+              - display_menu.enter: main_menu
+            else:
+              - display_menu.show: main_menu
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+
+  # Back Button (up one level or hide if at root)
+  - platform: gpio
+    pin:
+      number: GPIO17
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    name: "Back Button - OLED Rotary Screen"
+    icon: mdi:arrow-left-circle
+    id: back_button
+    on_press:
+      then:
+        - if:
+            condition:
+              display_menu.is_active: main_menu
+            then:
+              - display_menu.up: main_menu  # Navigates up or hides at root
+            else:
+              - logger.log: "Menu is hidden"
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+
+  # Rotary Push Button (same as Confirm for redundancy)
+  - platform: gpio
+    pin:
+      number: GPIO18
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    name: "Rotary Push Button - OLED Rotary Screen"
+    icon: mdi:cursor-default-click
+    id: rotary_push_button
+    on_press:
+      then:
+        - if:
+            condition:
+              display_menu.is_active: main_menu
+            then:
+              - display_menu.enter: main_menu
+            else:
+              - display_menu.show: main_menu
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+
+  # Boot Button (keep your original)
+  - platform: gpio
+    pin:
+      number: GPIO0
+      ignore_strapping_warning: true
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    name: "Boot Button - OLED Rotary Screen"
+    icon: mdi:gesture-tap-button
+
+# [ ==== Graphical Display Menu ==== ] #
+graphical_display_menu:
+  id: main_menu
+  display: oled_display
+  font: font_small
+  active: false
+  items:
+    - type: label
+      text: "ESPHome Remote"
+    - type: menu
+      text: "Settings"
+      items:
+        - type: back
+          text: "< Back"
+        - type: switch
+          text: "Status LED"
+          switch: onboard_led_switch
+        - type: command
+          text: "Restart Device"
+          on_value:
+            then:
+              - button.press: restart_button
+    - type: command
+      text: "Exit Menu"
+      on_value:
+       - display_menu.hide: main_menu
+
+# [ ==== Display Info ==== ] #
+display:
+  - platform: ssd1306_i2c
+    model: "SH1106 128x64"
+    address: 0x3C
+    id: oled_display
+    update_interval: 100ms
+    lambda: |-
+      if (id(main_menu).is_active()) {
+        // Menu handles rendering
+      } else {
+        // Default content
+        it.printf(64, 0, id(font_medium), TextAlign::TOP_CENTER, "ESPHome");
+        it.printf(64, 15, id(font_small), TextAlign::TOP_CENTER, "Turned: %d Deg", id(rotary_value));
+        it.printf(0, 54, id(font_small), TextAlign::TOP_CENTER, "%s", id(confirm_button).state ? "Enter" : "X");
+        it.printf(100, 54, id(font_small), TextAlign::TOP_CENTER, "%s", id(back_button).state ? "Back" : "X");
+      }
