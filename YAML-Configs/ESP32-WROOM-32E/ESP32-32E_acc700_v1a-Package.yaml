@@ -2,6 +2,8 @@
 # Version: 1a
 # esphome-web-acc700 
 # File Description: External Package
+# Note: ESP32-32E_acc700_v1-Base.yaml is OK to use with this Package
+
 
 # [ ==== Substitutions ==== ] #
 # substitutions:
