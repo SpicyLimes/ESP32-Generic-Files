@@ -1,0 +1,37 @@
+font:
+  - file: gfonts://Roboto
+    size: 10
+    id: roboto_small
+  - file: gfonts://Open+Sans
+    size: 10
+    id: open_sans_small
+  - file: gfonts://Inter
+    size: 10
+    id: inter_small
+  - file: gfonts://Lato
+    size: 10
+    id: lato_small
+  - file: gfonts://Montserrat
+    size: 10
+    id: montserrat_small
+  - file: gfonts://Work+Sans
+    size: 10
+    id: work_sans_small
+  - file: gfonts://IBM+Plex+Sans
+    size: 10
+    id: plex_sans_small
+  - file: gfonts://IBM+Plex+Mono
+    size: 10
+    id: plex_mono_small
+  - file: gfonts://Fira+Sans
+    size: 10
+    id: fira_sans_small
+  - file: gfonts://DM+Sans
+    size: 10
+    id: dm_sans_small
+  - file: gfonts://Space+Mono
+    size: 10
+    id: space_mono_small
+  - file: gfonts://Inconsolata
+    size: 10
+    id: inconsolata_small
